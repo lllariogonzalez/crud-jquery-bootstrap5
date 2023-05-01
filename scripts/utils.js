@@ -18,6 +18,6 @@ export function showForm(title) {
 
     let form = $("#form")
 
-    $("#title").html(title)
+    title && $("#title").html(title)
     form.toggle(300)
 }

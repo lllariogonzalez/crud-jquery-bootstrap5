@@ -1,6 +1,7 @@
 import handleEdit from "./handleEdit.js"
 import handleCreate from "./handleCreate.js"
 import { deleteUser, getUsers } from "./services.js"
+import { showForm } from "./utils.js"
 
 
 $(document).ready(async function () {
@@ -35,8 +36,8 @@ $(document).ready(async function () {
         $("#adressInput").val("")
         $("#phoneInput").val("")
         $("#emailInput").val("")
-        let form = $("#form")
-        form.toggle(300)
+        $("#submitForm").off("click")
+        showForm()
     })
 
 })
