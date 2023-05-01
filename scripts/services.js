@@ -32,3 +32,60 @@ export async function getUsers() {
 
     return users
 }
+
+export async function getUserById(id) {
+
+    let user
+
+    await $.get((usersAPI + id), function (data) {
+        user = data
+    })
+
+    return user
+}
+
+export function updateUser(data, id) {
+
+    $.ajax({
+        type: 'PUT',
+        url: (usersAPI + id),
+        contentType: 'application/json',
+        data: JSON.stringify(data)
+    }).done(function () {
+        alert('Update Success')
+        location.reload()
+    }).fail(function (error) {
+        console.log('Respuesta del sevidor:', error)
+    })
+
+}
+
+export function postUser(newUser) {
+
+    $.ajax({
+        type: 'POST',
+        url: usersAPI,
+        contentType: 'application/json',
+        data: JSON.stringify(newUser)
+    }).done(function () {
+        alert('Create Success')
+        location.reload()
+    }).fail(function (error) {
+        console.log('Respuesta del sevidor:', error)
+    })
+
+}
+
+export function deleteUser(id) {
+
+    $.ajax({
+        type: 'DELETE',
+        url: (usersAPI + id),
+    }).done(function () {
+        alert('Delete Success')
+        location.reload()
+    }).fail(function (error) {
+        console.log('Respuesta del sevidor:', error)
+    })
+
+}

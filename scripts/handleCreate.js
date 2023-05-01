@@ -1,42 +1,22 @@
-import usersAPI from "./config.js"
+import { postUser } from "./services.js"
+import { checkCreateSubmit, showForm } from "./utils.js"
 
-export default function handleCreate () {
+export default function handleCreate() {
 
     $("#nameInput").val("")
     $("#adressInput").val("")
     $("#phoneInput").val("")
     $("#emailInput").val("")
-
-    let dataFetch = {}
-
-    // agrega titulo correspondiente
-    $("#title").html("Create")
-
-    // aparecer
-    let form = $("#form")
-    form.toggle(300)
-
-    // deshabilito button submit
     let submitForm = $("#submitForm")
-    submitForm[0].disabled = true
+    let newUser = {}
 
-    submitForm.on("click", function(event){
+    showForm("Create")
+
+    submitForm.on("click", function (event) {
 
         event.preventDefault()
+        postUser(newUser)
 
-        $.ajax({
-            type: 'POST',
-            url: usersAPI,
-            contentType: 'application/json',
-            data: JSON.stringify(dataFetch)
-        })
-        .done(function(){
-            alert('Create Success')
-            location.reload()
-        })
-        .fail(function(error){
-            console.log('Respuesta del sevidor:', error)
-        })
     })
 
     // selecciono todos los inputs
@@ -45,51 +25,39 @@ export default function handleCreate () {
     let inputPhone = $("#phoneInput")
     let inputEmail = $("#emailInput")
 
-    inputName.on("change", function(){
-        if(inputName.val()===""){
-            delete dataFetch.name
-        } else {
-            dataFetch.name = inputName.val()
-        }
+    inputName.on("change", function () {
 
-        Object.entries(dataFetch).length !== 4
-                ? submitForm[0].disabled = true
-                : submitForm[0].disabled = false
+        inputName.val() === ""
+            ? delete newUser.name
+            : newUser.name = inputName.val()
+
+        checkCreateSubmit(newUser, submitForm)
     })
 
-    inputAdress.on("change", function(){
-        if(inputAdress.val()===""){
-            delete dataFetch.adress
-        } else {
-            dataFetch.adress = inputAdress.val()
-        }
+    inputAdress.on("change", function () {
 
-        Object.entries(dataFetch).length !== 4
-                ? submitForm[0].disabled = true
-                : submitForm[0].disabled = false
+        inputAdress.val() === ""
+            ? delete newUser.adress
+            : newUser.adress = inputAdress.val()
+
+        checkCreateSubmit(newUser, submitForm)
     })
 
-    inputPhone.on("change", function(){
-        if(inputPhone.val()===""){
-            delete dataFetch.phoneNumber
-        } else {
-            dataFetch.phoneNumber = inputPhone.val()
-        }
+    inputPhone.on("change", function () {
 
-        Object.entries(dataFetch).length !== 4
-                ? submitForm[0].disabled = true
-                : submitForm[0].disabled = false
+        inputPhone.val() === ""
+            ? delete newUser.phoneNumber
+            : newUser.phoneNumber = inputPhone.val()
+
+        checkCreateSubmit(newUser, submitForm)
     })
 
-    inputEmail.on("change", function(){
-        if(inputEmail.val()===""){
-            delete dataFetch.email
-        } else {
-            dataFetch.email = inputEmail.val()
-        }
+    inputEmail.on("change", function () {
 
-        Object.entries(dataFetch).length !== 4
-                ? submitForm[0].disabled = true
-                : submitForm[0].disabled = false
+        inputEmail.val() === ""
+            ? delete newUser.email
+            : newUser.email = inputEmail.val()
+
+        checkCreateSubmit(newUser, submitForm)
     })
 }

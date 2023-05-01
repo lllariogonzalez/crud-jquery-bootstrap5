@@ -1,40 +1,14 @@
-import usersAPI from "./config.js"
+import { getUserById, updateUser } from "./services.js"
+import { checkEditSubmit, showForm } from "./utils.js"
 
-export default function handleEdit(id){
+export default async function handleEdit(id) {
 
-    let dataFetch = {}
     let dataEdit = {}
-    let usersIdAPI = usersAPI + id
-
-    // agrega titulo correspondiente
-    $("#title").html("Edit")
-
-    // aparecer
-    let form = $("#form")
-    form.toggle(300)
-
-    // deshabilito button submit
+    // hago el fetch a la API para pedir datos actualizados
+    let dataFetch = await getUserById(id)
     let submitForm = $("#submitForm")
-    submitForm[0].disabled = true
 
-    submitForm.on("click", function(event){
-
-        event.preventDefault()
-
-        $.ajax({
-            type: 'PUT',
-            url: usersIdAPI,
-            contentType: 'application/json',
-            data: JSON.stringify(dataEdit)
-        })
-        .done(function(){
-            alert('Update Success')
-            location.reload()
-        })
-        .fail(function(error){
-            console.log('Respuesta del sevidor:', error)
-        })
-    })
+    showForm("Edit")
 
     // selecciono todos los inputs
     let inputName = $("#nameInput")
@@ -42,66 +16,57 @@ export default function handleEdit(id){
     let inputPhone = $("#phoneInput")
     let inputEmail = $("#emailInput")
 
-    // hago el fetch a la API para pedir datos actualizados
-    $.get(usersIdAPI, function(data, status){
-        dataFetch = data
-        inputName.val(data.name)
-        inputAdress.val(data.adress)
-        inputPhone.val(data.phoneNumber)
-        inputEmail.val(data.email)
-    })
+    inputName.val(dataFetch.name)
+    inputAdress.val(dataFetch.adress)
+    inputPhone.val(dataFetch.phoneNumber)
+    inputEmail.val(dataFetch.email)
 
     // agrego onChanges a cada input y controlo sus valores para habilitar el button
-    inputName.on("change", ()=>{
+    inputName.on("change", () => {
 
-            if(inputName.val()!== dataFetch.name) {
-                dataEdit.name = inputName.val()
-            }else{
-                delete dataEdit.name
-            }
+        inputName.val() !== dataFetch.name
+            ? dataEdit.name = inputName.val()
+            : delete dataEdit.name
 
-            Object.entries(dataEdit).length === 0  
-                ? submitForm[0].disabled = true
-                : submitForm[0].disabled = false
-        })
+        checkEditSubmit(dataEdit, submitForm)
 
-    inputAdress.on("change", ()=>{
+    })
 
-            if(inputAdress.val()!== dataFetch.adress) {
-                dataEdit.adress = inputAdress.val()
-            }else{
-                delete dataEdit.adress
-            }
+    inputAdress.on("change", () => {
 
-            Object.entries(dataEdit).length === 0  
-                ? submitForm[0].disabled = true
-                : submitForm[0].disabled = false
-        })
+        inputAdress.val() !== dataFetch.adress
+            ? dataEdit.adress = inputAdress.val()
+            : delete dataEdit.adress
 
-    inputPhone.on("change", ()=>{
+        checkEditSubmit(dataEdit, submitForm)
 
-            if(inputPhone.val()!== dataFetch.phoneNumber) {
-                dataEdit.phoneNumber = inputPhone.val()
-            }else{
-                delete dataEdit.phoneNumber
-            }
+    })
 
-            Object.entries(dataEdit).length === 0  
-                ? submitForm[0].disabled = true
-                : submitForm[0].disabled = false
-        })
+    inputPhone.on("change", () => {
 
-    inputEmail.on("change", ()=>{
+        inputPhone.val() !== dataFetch.phoneNumber
+            ? dataEdit.phoneNumber = inputPhone.val()
+            : delete dataEdit.phoneNumber
 
-            if(inputEmail.val()!== dataFetch.email) {
-                dataEdit.email = inputEmail.val()
-            }else{
-                delete dataEdit.email
-            }
+        checkEditSubmit(dataEdit, submitForm)
 
-            Object.entries(dataEdit).length === 0  
-                ? submitForm[0].disabled = true
-                : submitForm[0].disabled = false
-        })
+    })
+
+    inputEmail.on("change", () => {
+
+        inputEmail.val() !== dataFetch.email
+            ? dataEdit.email = inputEmail.val()
+            : delete dataEdit.email
+
+        checkEditSubmit(dataEdit, submitForm)
+
+    })
+
+    submitForm.on("click", function (event) {
+
+        event.preventDefault()
+        updateUser(dataEdit, id)
+
+    })
 
 }

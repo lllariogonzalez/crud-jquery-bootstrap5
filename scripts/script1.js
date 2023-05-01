@@ -1,7 +1,6 @@
 import handleEdit from "./handleEdit.js"
-import handleDelete from "./handleDelete.js"
 import handleCreate from "./handleCreate.js"
-import { getUsers } from "./services.js"
+import { deleteUser, getUsers } from "./services.js"
 
 
 $(document).ready(async function () {
@@ -23,7 +22,7 @@ $(document).ready(async function () {
 
     for (let button of deleteButton) {
         button.onclick = function () {
-            handleDelete(button.id)
+            deleteUser(button.id)
         }
     }
 
