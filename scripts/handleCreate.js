@@ -12,13 +12,6 @@ export default function handleCreate() {
 
     showForm("Create")
 
-    submitForm.on("click", function (event) {
-
-        event.preventDefault()
-        postUser(newUser)
-
-    })
-
     // selecciono todos los inputs
     let inputName = $("#nameInput")
     let inputAdress = $("#adressInput")
@@ -59,5 +52,12 @@ export default function handleCreate() {
             : newUser.email = inputEmail.val()
 
         checkCreateSubmit(newUser, submitForm)
+    })
+
+    submitForm.on("click", function (event) {
+
+        event.preventDefault()
+        postUser(newUser)
+
     })
 }

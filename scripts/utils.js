@@ -1,5 +1,3 @@
-let form = $("#form")
-
 export function checkCreateSubmit(newUser, submitForm) {
 
     Object.entries(newUser).length !== 4
@@ -17,6 +15,8 @@ export function checkEditSubmit(data, submitForm) {
 }
 
 export function showForm(title) {
+
+    let form = $("#form")
 
     $("#title").html(title)
     form.toggle(300)
