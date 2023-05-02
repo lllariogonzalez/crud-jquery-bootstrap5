@@ -3,6 +3,9 @@ import { checkCreateSubmit, showForm } from "./utils.js"
 
 export default function handleCreate() {
 
+    $("#create").toggle(300)
+    $("#sectionList").addClass("d-none")
+
     $("#nameInput").val("")
     $("#adressInput").val("")
     $("#phoneInput").val("")
@@ -12,7 +15,6 @@ export default function handleCreate() {
 
     showForm("Create")
 
-    // selecciono todos los inputs
     let inputName = $("#nameInput")
     let inputAdress = $("#adressInput")
     let inputPhone = $("#phoneInput")

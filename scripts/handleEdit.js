@@ -1,12 +1,22 @@
-import { getUserById, updateUser } from "./services.js"
-import { checkEditSubmit, showForm } from "./utils.js"
+import { deleteUser, getUserById, updateUser } from "./services.js"
+import { checkEditSubmit, renderHtml, showForm } from "./utils.js"
 
 export default async function handleEdit(id) {
 
     let dataEdit = {}
-    // hago el fetch a la API para pedir datos actualizados
-    let dataFetch = await getUserById(id)
+
+    let user = await getUserById(id)
+    $('#usersList').html(renderHtml(user))
+
+    let createButton = $("#create")
+    createButton.toggle(300)
+    $(".edit")[0].disabled = true
+
+    let buttonDelete = $(".delete")[0]
+    buttonDelete.onclick = () => deleteUser(buttonDelete.id)
+
     let submitForm = $("#submitForm")
+    checkEditSubmit(dataEdit, submitForm)
 
     showForm("Edit")
 
@@ -16,15 +26,14 @@ export default async function handleEdit(id) {
     let inputPhone = $("#phoneInput")
     let inputEmail = $("#emailInput")
 
-    inputName.val(dataFetch.name)
-    inputAdress.val(dataFetch.adress)
-    inputPhone.val(dataFetch.phoneNumber)
-    inputEmail.val(dataFetch.email)
+    inputName.val(user.name)
+    inputAdress.val(user.adress)
+    inputPhone.val(user.phoneNumber)
+    inputEmail.val(user.email)
 
-    // agrego onChanges a cada input y controlo sus valores para habilitar el button
     inputName.on("change", () => {
 
-        inputName.val() !== dataFetch.name
+        inputName.val() !== user.name
             ? dataEdit.name = inputName.val()
             : delete dataEdit.name
 
@@ -34,7 +43,7 @@ export default async function handleEdit(id) {
 
     inputAdress.on("change", () => {
 
-        inputAdress.val() !== dataFetch.adress
+        inputAdress.val() !== user.adress
             ? dataEdit.adress = inputAdress.val()
             : delete dataEdit.adress
 
@@ -44,7 +53,7 @@ export default async function handleEdit(id) {
 
     inputPhone.on("change", () => {
 
-        inputPhone.val() !== dataFetch.phoneNumber
+        inputPhone.val() !== user.phoneNumber
             ? dataEdit.phoneNumber = inputPhone.val()
             : delete dataEdit.phoneNumber
 
@@ -54,7 +63,7 @@ export default async function handleEdit(id) {
 
     inputEmail.on("change", () => {
 
-        inputEmail.val() !== dataFetch.email
+        inputEmail.val() !== user.email
             ? dataEdit.email = inputEmail.val()
             : delete dataEdit.email
 
@@ -65,7 +74,8 @@ export default async function handleEdit(id) {
     submitForm.on("click", function (event) {
 
         event.preventDefault()
-        updateUser(dataEdit, id)
+        checkEditSubmit(dataEdit, submitForm)
+        !submitForm[0].disabled && updateUser(dataEdit, id)
 
     })
 

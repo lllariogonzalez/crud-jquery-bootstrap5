@@ -1,43 +1,28 @@
-import handleEdit from "./handleEdit.js"
 import handleCreate from "./handleCreate.js"
-import { deleteUser, getUsers } from "./services.js"
-import { showForm } from "./utils.js"
+import { renderAllUsers, showForm } from "./utils.js"
 
+$(document).ready(function () {
 
-$(document).ready(async function () {
+    renderAllUsers()
 
-    let users = await getUsers()
-
-    $('#usersList').html(users)
-
-    let editButton = $(".edit")
-    let deleteButton = $(".delete")
     let createButton = $("#create")
-    let closeButton = $("#close")
-
-    for (let button of editButton) {
-        button.onclick = function () {
-            handleEdit(button.id)
-        }
-    }
-
-    for (let button of deleteButton) {
-        button.onclick = function () {
-            deleteUser(button.id)
-        }
-    }
 
     createButton.click(function () {
         handleCreate()
     })
 
-    closeButton.click(function () {
+    let closeButton = $("#close")
+
+    closeButton.click(async function () {
         $("#nameInput").val("")
         $("#adressInput").val("")
         $("#phoneInput").val("")
         $("#emailInput").val("")
         $("#submitForm").off("click")
+        $("#create").toggle(300)
+        $("#sectionList").removeClass("d-none")
         showForm()
+        renderAllUsers()
     })
 
 })
